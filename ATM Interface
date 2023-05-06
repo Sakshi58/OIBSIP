@@ -1,71 +1,90 @@
+ import java.util.Scanner;
 
-
-import java.util.*;
-
-public class ATM {
-
+public class atmint {
+    private static double balance = 5000; // initial balance
+    
     public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        System.out.println("Enter username:");
-        String name = sc.next();
-        System.out.println("Enter your pin:");
-        sc.next();
-        System.out.println("Login Successful!!\n\nWelcome " + name);
-
-        int bal = 0, n;
-        String hist = "";
-        do {
-            System.out.println(
-                    "\n\nChoose your options \n1.Withdraw \n2.Deposit \n3.Transfer \n4.Transaction History \n5.Exit");
-            int ans = sc.nextInt();
-            switch (ans) {
+        Scanner input = new Scanner(System.in);
+        
+        System.out.println("Welcome to the ATM");
+        System.out.println("Please enter your PIN:");
+        
+        int pin = input.nextInt();
+        
+        if (pin == 1234) {
+            displayMenu(input);
+        } else {
+            System.out.println("Invalid PIN");
+        }
+    }
+    
+    private static void displayMenu(Scanner input) {
+        while (true) {
+            System.out.println("Select an option:");
+            System.out.println("1. Transaction History");
+            System.out.println("2. Withdraw");
+            System.out.println("3. Deposit");
+            System.out.println("4. Transfer");
+            System.out.println("5. Exit");
+            
+            int option = input.nextInt();
+            
+            switch (option) {
                 case 1:
-                    System.out.println("Enter withdrawl amount:");
-                    int x = sc.nextInt();
-                    if (bal >= x) {
-                        bal -= x;
-                        System.out.println("Operation Successfull");
-                        hist += String.valueOf(x) + " Amount withdrawn\n";
-                    } else
-                        System.out.println("Operation Failed");
+                    checkBalance();
                     break;
-
                 case 2:
-                    System.out.println("Enter deposit amount:");
-                    int y = sc.nextInt();
-                    if (y <= 50000) {
-                        bal += y;
-                        System.out.println("Operation Successfull");
-                        hist += String.valueOf(y) + " Amount deposited\n";
-                    } else
-                        System.out.println("Amount is too large\n Sorry can't deposit");
+                    withdraw(input);
                     break;
-
                 case 3:
-                    System.out.println("Enter amount to transfer");
-                    int z = sc.nextInt();
-                    System.out.println("Enter account holders username to transfer money to");
-                    String trans = sc.next();
-                    bal -= z;
-                    System.out.println("Operation Successfull");
-                    hist += String.valueOf(z) + " amount transferred to " + trans + "\n";
+                    deposit(input);
                     break;
-
                 case 4:
-                    System.out.println("Your transaction history is:\n" + hist);
-
+                    transfer(input, option, null);
+                    break;
                 case 5:
+                    System.out.println("Thank you for using the ATM");
+                    return;
+                default:
+                    System.out.println("Invalid option");
                     break;
             }
-            System.out.println("Do you want to continue?\n1.Yes\n2.No");
-            n = sc.nextInt();
-        } while (n == 1);
-        sc.close();
+        }
     }
-
-    @Override
-    protected Object clone() throws CloneNotSupportedException {
-        // TODO Auto-generated method stub
-        return super.clone();
+    
+    private static void checkBalance() {
+        System.out.println("Your balance is: " + balance);
+    }
+    
+    private static void withdraw(Scanner input) {
+        System.out.println("Enter amount to withdraw:");
+        
+        double amount = input.nextDouble();
+        
+        if (amount > balance) {
+            System.out.println("Insufficient funds");
+        } else {
+            balance -= amount;
+            System.out.println("Remaining balance: " + balance);
+        }
+    }
+    
+    private static void deposit(Scanner input) {
+        System.out.println("Enter amount to deposit:");
+        
+        double amount = input.nextDouble();
+        
+        balance += amount;
+        System.out.println("New balance: " + balance);
+    }
+    private static void transfer(Scanner input, int amt , String name){
+        System.out.println("Enter receiver name: ");
+        name=input.next();
+        System.out.println("Enter amount to transfer: ");
+        amt=input.nextInt();
+        balance -=amt;
+        System.out.println("\nRemaining balance is : "+balance);
+        System.out.println("Transfer successful!! Thankyou!!");
     }
 }
+ 
